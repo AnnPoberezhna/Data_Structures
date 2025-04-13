@@ -43,7 +43,7 @@ public:
         delete[] arr;
     }
     
-    void addToEnd(T value) {
+    void add_to_end(T value) {
         // Checking if need to be resize
         if (size >= capacity) {
             resize();
@@ -54,7 +54,7 @@ public:
         size++;
     }
     
-    void addToStart(T value) {
+    void add_to_beginning(T value) {
         if (size >= capacity) {
             resize();
         }
@@ -69,7 +69,7 @@ public:
         size++;
     }
     
-    void addAtPosition(int position, T value) {
+    void add_at_random(int position, T value) {
         // Check if position is valid
         if (position < 0 || position > size) {
             throw out_of_range("Position out of range");
@@ -77,12 +77,12 @@ public:
         
         // Handle special cases
         if (position == 0) {
-            addToStart(value);
+            add_to_beginning(value);
             return;
         }
         
         if (position == size) {
-            addToEnd(value);
+            add_to_end(value);
             return;
         }
         
@@ -101,7 +101,7 @@ public:
         size++;
     }
     
-    void removeLast() {
+    void remove_from_end() {
         // Check if the array is not empty
         if (size <= 0) {
             throw runtime_error("List is empty");
@@ -109,7 +109,7 @@ public:
         size--;
     }
     
-    void removeFirst() {
+    void remove_from_beginning() {
         // Checking if array is not empty
         if (size <= 0) {
             throw runtime_error("List is empty");
@@ -122,7 +122,7 @@ public:
         size--;
     }
     
-    void removeAtPosition(int position) {
+    void remove_at_random(int position) {
         // Check if array is empty
         if (size <= 0) {
             throw runtime_error("List is empty");
@@ -135,12 +135,12 @@ public:
         
         // Handle special cases
         if (position == size - 1) {
-            removeLast();
+            remove_from_end();
             return;
         }
         
         if (position == 0) {
-            removeFirst();
+            remove_from_beginning();
             return;
         }
         
@@ -162,7 +162,6 @@ public:
         return false;  // Value not found
     }
 
-
     // Displaying Array List
     void display() {
         cout << "[ ";
@@ -173,6 +172,11 @@ public:
             }
         }
         cout << " ]" << endl;
+    }
+
+    // Getter for size
+    int get_size() const {
+        return size;
     }
 };
 
