@@ -31,8 +31,9 @@ public:
     void remove_from_beginning();
     void remove_from_end();
     void remove_at_random(int position);
-
+    bool contains(T value) const;
     void display() const;
+    int get_size() const;
 };
 
 // Constructor
@@ -204,6 +205,41 @@ void SinglyLinkedList<T>::display() const
         current = current->next;
     }
     cout << "nullptr" << endl;
+}
+
+// Checking if a value exists in the list
+template <typename T>
+bool SinglyLinkedList<T>::contains(T value) const
+{
+    Node *current=head ;
+    while(current!=nullptr)
+    {
+        if(current ->value==value)
+        {
+            return true;
+        }
+        current=current -> next ;
+    }
+    return false ;
+}
+
+// Getter for size
+template <typename T>
+int SinglyLinkedList<T>::get_size() const
+{
+    if (head == nullptr) {
+        return 0;
+    }
+    
+    int length = 0;
+    Node* temp = head;
+    
+    while (temp != nullptr) {
+        length++;
+        temp = temp->next;
+    }
+    
+    return length;
 }
 
 #endif // SINGLYLINKEDLIST_H
