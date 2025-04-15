@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include <exception>
 #include "ArrayList.h"
 #include "SinglyLinkedList.h"
 #include "DoublyLinkedList.h"
