@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <vector>
 using namespace std;
 
 template <typename T>
@@ -26,13 +27,17 @@ public:
     MaxPriorityQueue_DynamicArray();
     ~MaxPriorityQueue_DynamicArray();
 
+    vector<T> get_values() const;
     void insert(T value, int priority);
     T extract_max();
     T peek() const;
     void modify_key(T value, int new_priority);
     int return_size() const;
     void display() const;
+
 };
+
+
 
 // Constructor
 template <typename T>
@@ -47,6 +52,16 @@ MaxPriorityQueue_DynamicArray<T>::MaxPriorityQueue_DynamicArray() {
 template <typename T>
 MaxPriorityQueue_DynamicArray<T>::~MaxPriorityQueue_DynamicArray() {
     delete[] arr;
+}
+
+// Get keys
+template <typename T>
+std::vector<T> MaxPriorityQueue_DynamicArray<T>::get_values() const {
+    std::vector<T> values;
+    for (int i = 0; i < size; ++i) {
+        values.push_back(arr[i].value);
+    }
+    return values;
 }
 
 // Resize

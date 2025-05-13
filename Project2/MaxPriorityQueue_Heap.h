@@ -25,6 +25,7 @@ private:
     int capacity;
     int current_timestamp;
 
+
     void resize();
     void heapify_up(int index);
     void heapify_down(int index);
@@ -34,6 +35,7 @@ public:
     MaxPriorityQueue_Heap();
     ~MaxPriorityQueue_Heap();
 
+    vector<T> get_values() const;
     void insert(T value, int priority);
     T extract_max();
     T peek() const;
@@ -55,6 +57,17 @@ MaxPriorityQueue_Heap<T>::MaxPriorityQueue_Heap() {
 template <typename T>
 MaxPriorityQueue_Heap<T>::~MaxPriorityQueue_Heap() {
     delete[] heap;
+}
+
+//Get keys
+
+template <typename T>
+std::vector<T> MaxPriorityQueue_Heap<T>::get_values() const {
+    std::vector<T> values;
+    for (int i = 0; i < size; ++i) {
+        values.push_back(heap[i].value);
+    }
+    return values;
 }
 
 // Resize
