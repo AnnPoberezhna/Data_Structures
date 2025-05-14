@@ -1,10 +1,8 @@
 #include <iostream>
-#include <vector>
 #include <iterator>
 #include <array>
 #include <random>
 #include <chrono>
-#include <iomanip>
 #include <fstream>
 #include <string>
 #include <algorithm>
@@ -51,7 +49,7 @@ int main()
                 const auto start = chrono::high_resolution_clock::now();
                 dynamic_array_queue.insert(gen(), gen());
                 const auto end = chrono::high_resolution_clock::now();
-                store_result(file, start, end, size, "Dynamic extract_max");
+                store_result(file, start, end, size, "Dynamic insert");
             }
             {
                 const auto start = chrono::high_resolution_clock::now();
@@ -88,7 +86,7 @@ int main()
                 const auto start = chrono::high_resolution_clock::now();
                 heap_queue.insert(gen(), gen());
                 const auto end = chrono::high_resolution_clock::now();
-                store_result(file, start, end, size, "Heap extract_max");
+                store_result(file, start, end, size, "Heap insert");
             }
             {
                 const auto start = chrono::high_resolution_clock::now();
