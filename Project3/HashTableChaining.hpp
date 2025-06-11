@@ -18,15 +18,15 @@ private:
         }
     };
 
-    static const int TABLE_SIZE = 101;
-    SinglyLinkedList<KeyValue>* table[TABLE_SIZE];
+    SinglyLinkedList<KeyValue>** table;  // Dynamic array of pointers
+    int tableSize;                       
 
     int hashFunction(int key) const {
-        return key % TABLE_SIZE;
+        return key % tableSize;
     }
 
 public:
-    HashTableChaining();
+    HashTableChaining(int size);
     ~HashTableChaining();
 
     void insert(int key, int value);
@@ -35,17 +35,22 @@ public:
 };
 
 // Constructor
-HashTableChaining::HashTableChaining() {
-    for (int i = 0; i < TABLE_SIZE; ++i) {
+HashTableChaining::HashTableChaining(int size) : tableSize(size) {
+    if (size <= 0)
+        throw invalid_argument("Table size must be positive");
+
+    table = new SinglyLinkedList<KeyValue>*[tableSize];
+    for (int i = 0; i < tableSize; ++i) {
         table[i] = new SinglyLinkedList<KeyValue>();
     }
 }
 
 // Destructor
 HashTableChaining::~HashTableChaining() {
-    for (int i = 0; i < TABLE_SIZE; ++i) {
+    for (int i = 0; i < tableSize; ++i) {
         delete table[i];
     }
+    delete[] table;
 }
 
 // Insert
@@ -85,7 +90,7 @@ void HashTableChaining::remove(int key) {
 
 // Display
 void HashTableChaining::display() const {
-    for (int i = 0; i < TABLE_SIZE; ++i) {
+    for (int i = 0; i < tableSize; ++i) {
         cout << i << ": ";
         SinglyLinkedList<KeyValue>* bucket = table[i];
         int size = bucket->get_size();
@@ -98,3 +103,4 @@ void HashTableChaining::display() const {
 }
 
 #endif // HASHTABLECHAINING_HPP
+

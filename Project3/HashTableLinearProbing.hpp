@@ -5,9 +5,6 @@
 #include <stdexcept>
 using namespace std;
 
-const int LINEAR_TABLE_SIZE = 101;
-
-
 class HashTableLinearProbing {
 private:
     // Structure for storing key-value pairs
@@ -20,14 +17,14 @@ private:
         Entry();
     };
 
-    // Array of entries
-    Entry table[LINEAR_TABLE_SIZE];
+    Entry* table;      // Dynamic array of entries
+    int tableSize;     
 
-    // Hash function
     int hashFunction(int key) const;
 
 public:
-    HashTableLinearProbing();
+    HashTableLinearProbing(int size);
+    ~HashTableLinearProbing();
 
     void insert(int key, int value);
     void remove(int key);
@@ -35,32 +32,54 @@ public:
     void display() const;
 };
 
-
-
-// Implementation of Entry struct constructor 
+// Implementation of Entry constructor
 HashTableLinearProbing::Entry::Entry() : key(0), value(0), isOccupied(false), isDeleted(false) {}
 
+// Constructor
+HashTableLinearProbing::HashTableLinearProbing(int size) : tableSize(size) {
+    if (size <= 0)
+        throw invalid_argument("Table size must be positive");
 
-// Constructor 
-HashTableLinearProbing::HashTableLinearProbing() = default;
-
-
-//  Hash function 
-int HashTableLinearProbing::hashFunction(int key) const {
-    return key % LINEAR_TABLE_SIZE;
+    table = new Entry[tableSize];
 }
 
+// Destructor
+HashTableLinearProbing::~HashTableLinearProbing() {
+    delete[] table;
+}
 
-// Insert 
+// Hash function
+int HashTableLinearProbing::hashFunction(int key) const {
+    return key % tableSize;
+}
+
+// Insert
 void HashTableLinearProbing::insert(int key, int value) {
     int index = hashFunction(key);
     int startIndex = index;
+    int firstDeletedIndex = -1;
 
-    while (table[index].isOccupied && !table[index].isDeleted && table[index].key != key) {
-        index = (index + 1) % LINEAR_TABLE_SIZE;
-        if (index == startIndex) {
-            throw overflow_error("Hash table is full");
+    while (table[index].isOccupied) {
+        if (!table[index].isDeleted && table[index].key == key) {
+            table[index].value = value;
+            return;
         }
+
+        if (table[index].isDeleted && firstDeletedIndex == -1) {
+            firstDeletedIndex = index;
+        }
+
+        index = (index + 1) % tableSize;
+        if (index == startIndex) {
+            break; 
+        }
+    }
+
+    
+    if (firstDeletedIndex != -1) {
+        index = firstDeletedIndex;
+    } else if (table[index].isOccupied && !table[index].isDeleted && table[index].key != key) {
+        throw overflow_error("Hash table is full");
     }
 
     table[index].key = key;
@@ -70,7 +89,7 @@ void HashTableLinearProbing::insert(int key, int value) {
 }
 
 
-// Remove 
+// Remove
 void HashTableLinearProbing::remove(int key) {
     int index = hashFunction(key);
     int startIndex = index;
@@ -80,7 +99,7 @@ void HashTableLinearProbing::remove(int key) {
             table[index].isDeleted = true;
             return;
         }
-        index = (index + 1) % LINEAR_TABLE_SIZE;
+        index = (index + 1) % tableSize;
         if (index == startIndex) {
             break;
         }
@@ -89,8 +108,7 @@ void HashTableLinearProbing::remove(int key) {
     throw runtime_error("Key not found");
 }
 
-
-// Get 
+// Get
 int HashTableLinearProbing::get(int key) const {
     int index = hashFunction(key);
     int startIndex = index;
@@ -99,7 +117,7 @@ int HashTableLinearProbing::get(int key) const {
         if (!table[index].isDeleted && table[index].key == key) {
             return table[index].value;
         }
-        index = (index + 1) % LINEAR_TABLE_SIZE;
+        index = (index + 1) % tableSize;
         if (index == startIndex) {
             break;
         }
@@ -108,10 +126,9 @@ int HashTableLinearProbing::get(int key) const {
     throw runtime_error("Key not found");
 }
 
-
-// Display 
+// Display
 void HashTableLinearProbing::display() const {
-    for (int i = 0; i < LINEAR_TABLE_SIZE; ++i) {
+    for (int i = 0; i < tableSize; ++i) {
         cout << i << ": ";
         if (table[i].isOccupied && !table[i].isDeleted) {
             cout << "(" << table[i].key << ", " << table[i].value << ")";

@@ -7,24 +7,39 @@
 
 using namespace std;
 
-const int AVL_TABLE_SIZE = 101;
-
 class HashTableAVL {
 private:
-    AVLTree<int, int> table[AVL_TABLE_SIZE];  // Array of AVL trees
+    AVLTree<int, int>* table;   // Dynamic array
+    int tableSize;              
 
-    int hashFunction(int key) const;          
+    int hashFunction(int key) const;
 
 public:
-    void insert(int key, int value);          
-    void remove(int key);                      
-    int get(int key);                           
-    void display() const;                       
+    HashTableAVL(int size);      
+    ~HashTableAVL();             
+ 
+    void insert(int key, int value);
+    void remove(int key);
+    int get(int key);
+    void display() const;
 };
+
+// Konstruktor
+HashTableAVL::HashTableAVL(int size) : tableSize(size) {
+    if (size <= 0) {
+        throw invalid_argument("Table size must be positive");
+    }
+    table = new AVLTree<int, int>[tableSize];
+}
+
+// Destruktor
+HashTableAVL::~HashTableAVL() {
+    delete[] table;
+}
 
 // Hash function 
 int HashTableAVL::hashFunction(int key) const {
-    return key % AVL_TABLE_SIZE;
+    return key % tableSize;
 }
 
 // Insert
@@ -49,7 +64,7 @@ int HashTableAVL::get(int key) {
 
 // Display
 void HashTableAVL::display() const {
-    for (int i = 0; i < AVL_TABLE_SIZE; ++i) {
+    for (int i = 0; i < tableSize; ++i) {
         cout << i << ": ";
         table[i].display();
     }
